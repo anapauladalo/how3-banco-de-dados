@@ -67,5 +67,49 @@ namespace how_3
                 Console.WriteLine(ex.Message);
             }
         }
+
+        private void botao_cancelar_Click(object sender, EventArgs e)
+        {
+            limparCampos(); 
+        }
+        private void limparCampos()
+
+        {
+            tbCodigo.Clear();
+            tbGenero.Text = "";
+            tbTitulo.Clear();
+            tbAutor.Clear();
+            tbAno.Clear();
+            tbEditora.Clear();
+            tbDescricao.Clear();
+        }
+
+        private void botao_salvar_Click(object sender, EventArgs e)
+        {
+            MySqlConnectionStringBuilder conexaoBD = conexaoBanco();
+            MySqlConnection realizaConexacoBD = new MySqlConnection(conexaoBD.ToString());
+            try
+            {
+                realizaConexacoBD.Open();
+
+                MySqlCommand comandoMySql = realizaConexacoBD.CreateCommand();
+
+
+                comandoMySql.CommandText = "INSERT INTO livro (generoLivro,tituloLivro,autorLivro,anolivro,editoraLivro,descricaoLivro) " +
+                      "VALUES('" + tbGenero.Text + "', '" + tbTitulo.Text + "','" + tbAutor.Text + "', " + Convert.ToInt16(tbAno.Text) + ",'" + tbEditora.Text + "','" + tbDescricao.Text + "')";
+
+
+                comandoMySql.ExecuteNonQuery();
+
+                realizaConexacoBD.Close();
+                MessageBox.Show("Inserido com sucesso");
+                atualizarGrid();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
     }
+
 }
